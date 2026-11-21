@@ -1,5 +1,5 @@
- 
 import os
+import asyncio
 import threading
 from flask import Flask
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -149,7 +149,12 @@ def main():
     if not token:
         print("Error: BOT_TOKEN not found!")
         return
+
     threading.Thread(target=run_web, daemon=True).start()
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
     application = Application.builder().token(token).build()
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
@@ -157,4 +162,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-  
+ 
